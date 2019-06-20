@@ -1,0 +1,28 @@
+/*
+ * RTC.cpp
+ *
+ * Created: 16.06.2019 23:52:46
+ *  Author: JackFrost
+ */ 
+
+#include "RTC2.h"
+#include "sam.h"
+
+
+
+void rtc_init()
+{
+	MCLK->APBAMASK.bit.OSC32KCTRL_ = 1;
+	OSC32KCTRL->OSC32K.bit.EN1K = 1;
+	OSC32KCTRL->OSC32K.bit.ENABLE =  1;
+	OSC32KCTRL->RTCCTRL.bit.RTCSEL = OSC32KCTRL_RTCCTRL_RTCSEL_OSC1K;
+	MCLK->APBAMASK.bit.RTC_ = 1;
+	RTC->MODE0.INTENSET.bit.PER7 = 1;
+	RTC->MODE0.INTENSET.bit.PER6 = 1;
+	RTC->MODE0.INTENSET.bit.PER5 = 1;
+	RTC->MODE0.CTRLA.bit.PRESCALER = RTC_MODE0_CTRLA_PRESCALER_DIV1024_Val;
+	NVIC_EnableIRQ(RTC_IRQn);
+	RTC->MODE0.CTRLA.bit.ENABLE = 1;
+	
+	
+}
